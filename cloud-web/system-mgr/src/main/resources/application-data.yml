@@ -1,0 +1,9 @@
+spring:
+  redis:
+    database: 8
+    host: 192.168.100.203
+    port: 19000
+    password:
+    max-idle: 10
+    max-wait: 10000
+    min-idle: 5

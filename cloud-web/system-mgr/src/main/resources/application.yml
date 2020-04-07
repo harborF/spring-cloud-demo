@@ -1,0 +1,47 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+server:
+  port: 8080
+tomcat:
+  uri-encoding: UTF-8
+
+spring:
+  profiles:
+    active: dev,data
+  session:
+    store-type: redis
+  mvc:
+    view:
+      suffix: .html
+    static-path-pattern: /**
+  resources:
+    static-locations: classpath:/static/
+
+  freemarker:
+    suffix: .ftl  #后缀名
+    template-loader-path: classpath:/templates/ #模板加载路径 按需配置
+    content-type: text/html
+    enabled: true
+    cache: false #缓存配置
+    charset: UTF-8 #编码格式
+    settings:
+      number_format: '0.##'   #数字格式化，无小数点
+    allow-request-override: false
+    check-template-location: true
+    expose-request-attributes: false
+    expose-session-attributes: false
+    expose-spring-macro-helpers: false
+
+security:
+  oauth2:
+    client:
+      accessTokenUri: http://localhost:8781/oauth/token
+      userAuthorizationUri: http://localhost:8781/oauth/authorize
+      clientId: client_1
+      clientSecret: password
+    resource:
+      userInfoUri: http://localhost:8781/auth/current
+

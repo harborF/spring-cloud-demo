@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.likesea.system.mapper.OrganizationMapper">
+
+    <!--员工-->
+    <select id="selectEmployeeList" parameterType="Map" resultType="OrgEmployee">
+        select * from crm_employee
+    </select>
+
+    <select id="selectEmployeeByPKey" parameterType="Integer" resultType="OrgEmployee">
+        select * from crm_employee where user_id=#{userId}
+    </select>
+
+    <insert id="insertEmployee" parameterType="OrgEmployee">
+        replace into crm_employee(role_name,role_desc,status) values(#{roleName},#{roleDesc},#{status})
+    </insert>
+
+    <update id="updateEmployee" parameterType="OrgEmployee">
+        update crm_employee set role_name=#{roleName},role_desc=#{roleDesc},status=#{status} where role_id=#{roleId}
+    </update>
+
+    <delete id="deleteEmployeeByPId" parameterType="Integer">
+        delete from crm_employee where role_id=${roleId} and exists (select 1 from resource_info t2 where t1.auth_id=t2.tree_id and t2.res_type=3)
+    </delete>
+
+    <!--公司-->
+    <select id="selectCompanyList" parameterType="Map" resultType="OrgCompany">
+        select * from crm_company
+    </select>
+
+    <select id="selectCompanyByPKey" parameterType="Integer" resultType="OrgCompany">
+        select * from crm_company where user_id=#{userId}
+    </select>
+
+    <insert id="insertCompany" parameterType="OrgCompany">
+        replace into crm_company(role_name,role_desc,status) values(#{roleName},#{roleDesc},#{status})
+    </insert>
+
+    <update id="updateCompany" parameterType="OrgCompany">
+        update crm_company set role_name=#{roleName},role_desc=#{roleDesc},status=#{status} where role_id=#{roleId}
+    </update>
+
+    <delete id="deleteCompanyByPId" parameterType="Integer">
+        delete from crm_company where role_id=${roleId} and exists (select 1 from resource_info t2 where t1.auth_id=t2.tree_id and t2.res_type=3)
+    </delete>
+
+    <!--部门-->
+    <select id="selectDepartmentList" parameterType="Map" resultType="OrgDepartment">
+        select * from crm_department
+    </select>
+
+    <select id="selectDepartmentByPKey" parameterType="Integer" resultType="OrgDepartment">
+        select * from crm_department where user_id=#{userId}
+    </select>
+
+    <insert id="insertDepartment" parameterType="OrgDepartment">
+        replace into crm_department(role_name,role_desc,status) values(#{roleName},#{roleDesc},#{status})
+    </insert>
+
+    <update id="updateDepartment" parameterType="OrgDepartment">
+        update crm_department set role_name=#{roleName},role_desc=#{roleDesc},status=#{status} where role_id=#{roleId}
+    </update>
+
+    <delete id="deleteDepartmentByPId" parameterType="Integer">
+        delete from crm_department where role_id=${roleId} and exists (select 1 from resource_info t2 where t1.auth_id=t2.tree_id and t2.res_type=3)
+    </delete>
+
+    <!--职务-->
+    <select id="selectPositionList" parameterType="Map" resultType="OrgPosition">
+        select * from crm_position
+    </select>
+
+    <select id="selectPositionByPKey" parameterType="Integer" resultType="OrgPosition">
+        select * from crm_position where user_id=#{userId}
+    </select>
+
+    <insert id="insertPosition" parameterType="OrgPosition">
+        replace into crm_position(role_name,role_desc,status) values(#{roleName},#{roleDesc},#{status})
+    </insert>
+
+    <update id="updatePosition" parameterType="OrgPosition">
+        update crm_position set role_name=#{roleName},role_desc=#{roleDesc},status=#{status} where role_id=#{roleId}
+    </update>
+
+    <delete id="deletePositionByPId" parameterType="Integer">
+        delete from crm_position where role_id=${roleId} and exists (select 1 from resource_info t2 where t1.auth_id=t2.tree_id and t2.res_type=3)
+    </delete>
+</mapper>
+

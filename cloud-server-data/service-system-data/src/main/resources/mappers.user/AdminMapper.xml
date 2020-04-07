@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.likesea.system.mapper.AdminMapper">
+
+    <select id="selectAuthMemberList" parameterType="Map" resultType="AuthorityMember">
+        select * from member_info
+    </select>
+
+    <select id="selectAuthMemberByPKey" parameterType="Long" resultType="AuthorityMember">
+        select * from member_info where user_id=#{userId}
+    </select>
+
+    <insert id="insertAuthMember" keyProperty="userId" useGeneratedKeys="true" parameterType="AuthorityMember">
+        insert into member_info(user_name,role_desc,status) values(#{roleName},#{roleDesc},#{status})
+    </insert>
+
+    <update id="updateAuthMemberByPKey" parameterType="AuthorityMember">
+        update member_info set user_name=#{roleName},role_desc=#{roleDesc},status=#{status} where user_id=#{userId}
+    </update>
+
+    <!--角色-->
+    <select id="getRoleByPId" parameterType="Integer" resultType="AuthorityRole">
+        select * from role_info where role_id=#{roleId}
+    </select>
+
+    <select id="selectRoleList" parameterType="Map" resultType="AuthorityRole">
+        select * from role_info t1 where status=1
+        <if test="userId != null and userId != 0">
+            and exists(select 1 from member_role t2 where user_id=#{userId} and t1.role_id=t2.role_id)
+        </if>
+    </select>
+
+    <insert id="insertRole" keyProperty="roleId" useGeneratedKeys="true" parameterType="AuthorityRole">
+        replace into role_info(role_name,role_desc,status) values(#{roleName},#{roleDesc},#{status})
+    </insert>
+
+    <update id="updateRoleByPKey" parameterType="AuthorityRole">
+        update role_info set role_name=#{roleName},role_desc=#{roleDesc},status=#{status} where role_id=#{roleId}
+    </update>
+
+    <!--用户角色-->
+    <insert id="insertUserRole" parameterType="List">
+        insert into member_role(user_id,role_id) values
+        <foreach collection="userRoleList" item="item" index="index" separator="," >
+            (#{item.userId}, #{item.roleId})
+        </foreach>
+    </insert>
+
+    <delete id="deleteUserRole" parameterType="Integer">
+        delete from member_role where user_id=#{userId}
+    </delete>
+
+    <!--module-->
+    <select id="getAppByPId" parameterType="Integer" resultType="AuthorityApp">
+        select * from module_info where app_id=#{appId}
+    </select>
+
+    <select id="selectAppList" parameterType="Map" resultType="AuthorityApp">
+        select * from module_info
+    </select>
+
+    <insert id="insertApp" keyProperty="appId" useGeneratedKeys="true" parameterType="AuthorityApp">
+        insert into module_info(app_name,app_type,service_id,create_time,create_uid)
+         values (#{appName}, #{appType}, #{serviceId}, #{createTime}, #{createUid})
+    </insert>
+
+    <update id="updateAppByPKey"  parameterType="AuthorityApp">
+        update module_info set app_name=#{appName},app_type=#{appType},service_id=#{serviceId} where app_id=#{appId}
+    </update>
+
+</mapper>
+

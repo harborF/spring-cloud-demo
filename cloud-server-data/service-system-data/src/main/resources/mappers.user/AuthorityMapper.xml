@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.likesea.system.mapper.AuthorityMapper">
+
+    <!--resource-->
+    <select id="getAuthResByPId" parameterType="Integer" resultType="AuthorityResource">
+        select * from resource_info where tree_id=#{resId}
+    </select>
+
+    <select id="selectPermissionList" parameterType="Map" resultType="AuthorityResource">
+        select * from resource_info where <![CDATA[ res_type<>1 ]]>
+    </select>
+
+    <select id="selectMenuList" parameterType="Map" resultType="AuthorityResource">
+        select t1.*,t2.app_name from resource_info t1,module_info t2 where res_type=1 and t1.app_id=t2.app_id
+        <if test="appId != null and appId != 0">  
+			and app_id =#{appId}
+        </if>
+        <if test="parentId != null">
+            and t1.parent_id=#{parentId}
+        </if>
+        order by app_id,parent_id,order_id asc
+    </select>
+
+    <insert id="insertAuthRes" keyProperty="treeId" useGeneratedKeys="true" parameterType="AuthorityResource">
+        insert into resource_info(res_title,res_type,auth_key,res_desc,res_url,parent_id,app_id)
+         values (#{resTitle}, #{resType}, #{authKey}, #{resDesc}, #{resUrl}, #{parentId}, #{appId})
+    </insert>
+
+    <update id="updateAuthRes"  parameterType="AuthorityResource">
+        update resource_info set res_title=#{resTitle},res_url=#{resUrl} where tree_id=#{treeId}
+    </update>
+
+    <delete id="deleteResByPKey">
+
+    </delete>
+
+    <!--权限-->
+    <select id="selectAuthResByRId" parameterType="Integer" resultType="AuthorityResource">
+        SELECT t1.*,t3.app_name,t2.role_id from resource_info t1 LEFT JOIN role_permission t2 on t2.role_id=#{roleId} and t1.tree_id=t2.auth_id
+        LEFT JOIN module_info t3 on t1.app_id=t3.app_id
+        where t1.res_type=1
+    </select>
+
+    <delete id="deleteMenuByRId" parameterType="Integer">
+        delete from role_permission t1 where role_id=${roleId} and exists (select 1 from resource_info t2 where t1.auth_id=t2.tree_id and t2.res_type=1)
+    </delete>
+
+    <delete id="deletePermByRId" parameterType="Integer">
+        delete from role_permission where role_id=${roleId} and exists (select 1 from resource_info t2 where t1.auth_id=t2.tree_id and t2.res_type=3)
+    </delete>
+
+    <insert id="insertRoleAuthRes" parameterType="List">
+        insert into role_permission(role_id,auth_id) values
+        <foreach collection="authResList" item="item" index="index" separator="," >
+            (#{item.roleId}, #{item.treeId})
+        </foreach>
+    </insert>
+
+</mapper>
+

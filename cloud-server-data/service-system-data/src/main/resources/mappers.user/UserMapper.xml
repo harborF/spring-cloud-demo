@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.likesea.system.mapper.UserMapper">
+
+    <select id="selectByPKey" parameterType="Long" resultType="User">
+        select * from users where id=#{id}
+    </select>
+
+    <insert id="insertUser" keyProperty="userId" useGeneratedKeys="true" parameterType="User">
+        insert into users(user_name) values(#{id})
+    </insert>
+</mapper>
+
